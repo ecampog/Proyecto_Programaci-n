@@ -50,6 +50,59 @@ def cargar_archivo(ruta_documento):
                     filas.append(arreglo_filas)#los agrega a la lista previamente creada
     return columnas, filas
 
+def impresor_fila(fila, termino = "SIN VALOR"):#funcion para imprimir las filas
+        
+        for celda in fila: #selecciona cada celda de la fila a imprimir
+
+            if termino in celda.casefold():#verifica si es el termino y lo señala
+                print("|", f"--> {celda} <--", end=" ")#imprime y señala la celda
+
+            else:
+                print("|", celda, end=" ") #imprime la celda sin señalar
+            
+        print() # da espacio al imprimer el siguiene enunciado
+        print() 
+
+def verificador_de_estado(): #verifica si continua en en el apartado de buqueda
+
+    YN = input("Deseas volver a buscar? Y/N: ").strip().casefold() #pregunta al usuario que quiere hacer
+
+    if YN == "n":
+        return False #devuelve false para salir del apartado de busqueda
+    
+    elif YN == "y":
+        return True #devuelve true para seguir en el apartado de busqueda
+
+    else:
+        print("Comando no reconocido.")
+        verificador_de_estado() # se llama a si mismo a que la respuesta sea valida
+    
+def Buscar_Texto(columnas, filas):
+
+    estado = True # inicia con estado true para el bucle
+
+    while estado:
+        termino = input("Que termino quieres buscar?: ").strip().casefold() #recibe y limpia la palabra que se busca
+        print() #espacio con la siguiene impresion
+        contador = 0 #establece cuantas filas se enccontraron con ese termino
+        fila_procesada = 0 #establece que fila ya se imprimio
+        impresor_fila(columnas) #imprime los encabezados
+
+        for fila in filas: #selecciona una por una cada fila
+
+            for celda in fila: #seleciona cada celda de la fila
+
+                if termino in celda.casefold(): # compara las celdas con en termino
+                    contador += 1 # suma a la cantidad de registros encontrados
+
+                    if fila_procesada != fila[0]: #evita imprimir la misma fila dos veces
+                        impresor_fila(fila, termino) #imprime la fila y señala el termino
+                        fila_procesada = fila[0] #odtiene el valor de la fila que ya se imprimio
+
+        print(f"Se encontraron {contador} filas con el Termino '{termino}'.") #imprime la cantidad de registros encontrados
+        estado = verificador_de_estado() #funcion que define si el buscador se acaba o no
+        contador = 0 #reinicia el contador
+
 def cargar_menu():
 
     print("\n" + "="*55)
@@ -77,6 +130,7 @@ def ejecutar_code():
             
         if opcion == "1":
             print("\n--- BÚSQUEDA POR TEXTO ---")
+            Buscar_Texto(columnas, filas)
                     
         elif opcion == "2":
             print("\n--- ESTADÍSTICAS BÁSICAS DEL MINUTO DE REGULACIÓN ---")
